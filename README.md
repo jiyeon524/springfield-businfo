@@ -38,4 +38,27 @@
 Picture1.png![image](https://user-images.githubusercontent.com/102651767/161022249-c1243e02-8f6b-4e9c-9a60-616bc4eb7850.png)
 
 
+## Web Clinet
+
+본 과제에서는 amplify를 이용하여 API 테스트를 위한 Web client를 제공합니다.
+
+생성된 web client의 형상은 아래와 같습니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/161053081-011e925a-6473-45c8-8ccd-8113faf5cd12.png)
+
+
+## Postman을 위한 테스트 환경 
+
+Postman으로 RESTful api를 테스트시 아래를 참조합니다. 조회시 station_id와 bus_num를 사용하므로 아래와 같이 json형태로 입력을 받으며, 이때 얻어진 결과는 아래와 같이 기대되는 버스 대기 시간 및 예상 버스의 빈좌석 정보를 제공하게 됩니다. 이 API는 Android나 IOS에서 즉각적인 결과를 표시하기 위해 용이하며, 본 데모에서 제공하는 slack을 통해 좀더 편리하게 사용할 수도 있습니다. 
+
+<img width="820" alt="image" src="https://user-images.githubusercontent.com/52392004/161053216-a3cc73e4-42ee-49d0-9e7c-3b661ceb4417.png">
+
+
+## Slack의 전달된 Notification 
+
+Slack으로 전달되는 버스에 대한 정보는 아래와 같습니다. 아래 케이스는 약간의 시간을 두고 Web client를 통해 getLocation API 호출하였을때의 결과입니다. 버스의 이동에 따라서 몇변후에 도착할지에 대한 정보를 제공하고 있으며, 몇 정거장전에 있는지와 몇개의 빈좌석이 있는지에 대한 정보를 상세하게 제공하고 있습니다. 
+
+![image](https://user-images.githubusercontent.com/52392004/161053838-7132440b-c2f9-4cfc-9fcb-1cf9d1ce500d.png)
+
+
 

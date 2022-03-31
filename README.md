@@ -12,7 +12,7 @@
 
 1) 버스 또는 지하철에 있는 IoT 디바이스를 통해 만들어진 각종 이벤트는 AWS의 IoT core를 통해 수집됩니다.
 
-2) IoT Core는 디바이스가 보내준 데이터를 활용할수 있도록 DynamoDB에 저장합니다. 
+2) IoT Core는 디바이스가 보내준 데이터를 활용 할 수 있도록 DynamoDB에 저장합니다. 
 
 3) 저장된 데이터는 사용자가 API Gateway와 Lambda를 통해 조회 할수 있습니다.
 
@@ -21,6 +21,7 @@
 
 
 ## Customer AS-IS
+
 고객 시나리오의 AS-IS Architecture 는 다음과 같습니다.
 
 ![image](https://user-images.githubusercontent.com/102651767/161021380-5b8f6e4a-b3f8-4cc7-927a-067e00b2516e.png)
@@ -35,12 +36,13 @@
 
 
 ## Customer Pain Point 및 클라우드 구성 Requirement
+
 고객의 Pain Point 및 클라우드 환경으로의 전환에 있어 필요한 Requirement 는 다음과 같습니다.
 
 Picture1.png![image](https://user-images.githubusercontent.com/102651767/161022249-c1243e02-8f6b-4e9c-9a60-616bc4eb7850.png)
 
 
-## Web Clinet
+## Web Client 개발 
 
 본 과제에서는 amplify를 이용하여 API 테스트를 위한 Web client를 제공합니다.
 
@@ -49,14 +51,14 @@ Picture1.png![image](https://user-images.githubusercontent.com/102651767/1610222
 ![image](https://user-images.githubusercontent.com/52392004/161053081-011e925a-6473-45c8-8ccd-8113faf5cd12.png)
 
 
-## Postman을 위한 테스트 환경 
+## Postman를 이용한 테스트 환경 구성
 
 Postman으로 RESTful api를 테스트시 아래를 참조합니다. 조회시 station_id와 bus_num를 사용하므로 아래와 같이 json형태로 입력을 받으며, 이때 얻어진 결과는 아래와 같이 기대되는 버스 대기 시간 및 예상 버스의 빈좌석 정보를 제공하게 됩니다. 이 API는 Android나 IOS에서 즉각적인 결과를 표시하기 위해 용이하며, 본 데모에서 제공하는 slack을 통해 좀더 편리하게 사용할 수도 있습니다. 
 
 <img width="820" alt="image" src="https://user-images.githubusercontent.com/52392004/161053216-a3cc73e4-42ee-49d0-9e7c-3b661ceb4417.png">
 
 
-## Slack의 전달된 Notification 
+## Slack에 전달된 Notification 
 
 Slack으로 전달되는 버스에 대한 정보는 아래와 같습니다. 아래 케이스는 약간의 시간을 두고 Web client를 통해 getLocation API 호출하였을때의 결과입니다. 버스의 이동에 따라서 몇변후에 도착할지에 대한 정보를 제공하고 있으며, 몇 정거장전에 있는지와 몇개의 빈좌석이 있는지에 대한 정보를 상세하게 제공하고 있습니다. 
 

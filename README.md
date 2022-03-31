@@ -4,7 +4,9 @@
 
 전체적인 Architecture 구조는 아래와 같습니다. 
 
-![image](https://user-images.githubusercontent.com/102651767/161021259-08f5de4c-42ce-4e82-9d6f-d401dcd0af4e.png)
+![image](https://user-images.githubusercontent.com/52392004/161054356-9a64a0b1-7671-4138-905e-b0c1c3eab69c.png)
+
+
 
 사용 시나리오는 아래와 같습니다. 
 
@@ -58,7 +60,6 @@ Postman으로 RESTful api를 테스트시 아래를 참조합니다. 조회시 s
 
 Slack으로 전달되는 버스에 대한 정보는 아래와 같습니다. 아래 케이스는 약간의 시간을 두고 Web client를 통해 getLocation API 호출하였을때의 결과입니다. 버스의 이동에 따라서 몇변후에 도착할지에 대한 정보를 제공하고 있으며, 몇 정거장전에 있는지와 몇개의 빈좌석이 있는지에 대한 정보를 상세하게 제공하고 있습니다. 
 
-![image](https://user-images.githubusercontent.com/52392004/161053838-7132440b-c2f9-4cfc-9fcb-1cf9d1ce500d.png)
-
+![image](https://user-images.githubusercontent.com/52392004/161054433-1a4e7ac2-3f12-40df-8d8d-6ecfad91825f.png)
 
 

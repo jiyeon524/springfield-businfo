@@ -1,4 +1,4 @@
-# Next-Gen Public TransportationInformation system (PTiS)
+# Next-Gen Public Transportation Information system (PTiS)
 
 본 repository에서는 IoT 디바이스에서 수집된 데이터를 AWS의 서버리스 Architecture를 데이터를 효과적으로 처리하고 사용자에게 편리한 메신저를 통해 전달하는 방법에 대해 설명하고자 합니다.
 

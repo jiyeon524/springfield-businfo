@@ -1,0 +1,1146 @@
+{
+  "Resources": {
+    "snsspringfield33A07412": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "TopicName": "sns-springfield"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/sns-springfield/Resource"
+      }
+    },
+    "BusLocationInfoA536C5A5": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "bus_num",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "station_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "bus_num",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "station_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "TableName": "BusLocationInfo"
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/BusLocationInfo/Resource"
+      }
+    },
+    "s3springfield97C835D3": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/s3-springfield/Resource"
+      }
+    },
+    "s3springfieldPolicyB32DDC6C": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "s3springfield97C835D3"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "s3springfield97C835D3",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "s3springfield97C835D3",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "springfieldOrigin1S3Origin452C5424",
+                    "S3CanonicalUserId"
+                  ]
+                }
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "s3springfield97C835D3",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/s3-springfield/Policy/Resource"
+      }
+    },
+    "s3springfieldAutoDeleteObjectsCustomResource09DEFBD4": {
+      "Type": "Custom::S3AutoDeleteObjects",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn"
+          ]
+        },
+        "BucketName": {
+          "Ref": "s3springfield97C835D3"
+        }
+      },
+      "DependsOn": [
+        "s3springfieldPolicyB32DDC6C"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/s3-springfield/AutoDeleteObjectsCustomResource/Default"
+      }
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+      }
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "483ae06ed27ef8ca76e011264d772420593a6cfe8544759c306ef3b98c9e25be.zip"
+        },
+        "Timeout": 900,
+        "MemorySize": 128,
+        "Handler": "__entrypoint__.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs12.x",
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda function for auto-deleting objects in ",
+              {
+                "Ref": "s3springfield97C835D3"
+              },
+              " S3 bucket."
+            ]
+          ]
+        }
+      },
+      "DependsOn": [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+        "aws:asset:path": "asset.483ae06ed27ef8ca76e011264d772420593a6cfe8544759c306ef3b98c9e25be",
+        "aws:asset:property": "Code"
+      }
+    },
+    "springfieldOrigin1S3Origin452C5424": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Identity for CdkStackspringfieldOrigin13A75A573"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/springfield/Origin1/S3Origin/Resource"
+      }
+    },
+    "springfield2F4824B0": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PUT",
+              "PATCH",
+              "POST",
+              "DELETE"
+            ],
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "Compress": true,
+            "TargetOriginId": "CdkStackspringfieldOrigin13A75A573",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "s3springfield97C835D3",
+                  "RegionalDomainName"
+                ]
+              },
+              "Id": "CdkStackspringfieldOrigin13A75A573",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "springfieldOrigin1S3Origin452C5424"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/springfield/Resource"
+      }
+    },
+    "lambdaGetLocationServiceRole8E9E8F54": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/lambdaGetLocation/ServiceRole/Resource"
+      }
+    },
+    "lambdaGetLocationServiceRoleDefaultPolicyBB7F0B7F": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BusLocationInfoA536C5A5",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "snsspringfield33A07412"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "lambdaGetLocationServiceRoleDefaultPolicyBB7F0B7F",
+        "Roles": [
+          {
+            "Ref": "lambdaGetLocationServiceRole8E9E8F54"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/lambdaGetLocation/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "lambdaGetLocation8AEF967B": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "0c56d4c53318ab73d4eb53e1d5e4d67c61bd356790ac40791b57749d4590c9e5.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "lambdaGetLocationServiceRole8E9E8F54",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "topicArn": {
+              "Ref": "snsspringfield33A07412"
+            },
+            "bucket": {
+              "Ref": "s3springfield97C835D3"
+            }
+          }
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "Timeout": 10
+      },
+      "DependsOn": [
+        "lambdaGetLocationServiceRoleDefaultPolicyBB7F0B7F",
+        "lambdaGetLocationServiceRole8E9E8F54"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/lambdaGetLocation/Resource",
+        "aws:asset:path": "asset.0c56d4c53318ab73d4eb53e1d5e4d67c61bd356790ac40791b57749d4590c9e5",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "lambdaGetLocationInvokeServicePrincipalapigatewayamazonawscomA976FE75": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaGetLocation8AEF967B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/lambdaGetLocation/InvokeServicePrincipal(apigateway.amazonaws.com)"
+      }
+    },
+    "LambdaSlackServiceRole519A82E6": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/LambdaSlack/ServiceRole/Resource"
+      }
+    },
+    "LambdaSlackA1FFF73E": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "4b48ca901f247ca787b92e33d3fa57066a409d85b1ff3031e5096003c7841ea4.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaSlackServiceRole519A82E6",
+            "Arn"
+          ]
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "Timeout": 10
+      },
+      "DependsOn": [
+        "LambdaSlackServiceRole519A82E6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/LambdaSlack/Resource",
+        "aws:asset:path": "asset.4b48ca901f247ca787b92e33d3fa57066a409d85b1ff3031e5096003c7841ea4",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "LambdaSlackAllowInvokeCdkStacksnsspringfieldA7867E286DF3E9B1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaSlackA1FFF73E",
+            "Arn"
+          ]
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "snsspringfield33A07412"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/LambdaSlack/AllowInvoke:CdkStacksnsspringfieldA7867E28"
+      }
+    },
+    "LambdaSlacksnsspringfieldB40916D1": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "snsspringfield33A07412"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "LambdaSlackA1FFF73E",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/LambdaSlack/sns-springfield/Resource"
+      }
+    },
+    "AccessLogs8B620ECA": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 90
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/AccessLogs/Resource"
+      }
+    },
+    "AccessLogsPolicyResourcePolicyA1E3EF94": {
+      "Type": "AWS::Logs::ResourcePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"Statement\":[{\"Action\":[\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Resource\":\"",
+              {
+                "Fn::GetAtt": [
+                  "AccessLogs8B620ECA",
+                  "Arn"
+                ]
+              },
+              "\"}],\"Version\":\"2012-10-17\"}"
+            ]
+          ]
+        },
+        "PolicyName": "CdkStackAccessLogsPolicy43F890AB"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/AccessLogs/Policy/ResourcePolicy"
+      }
+    },
+    "apispringfield196222A9": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "API Gateway",
+        "EndpointConfiguration": {
+          "Types": [
+            "REGIONAL"
+          ]
+        },
+        "Name": "api-springfield"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Resource"
+      }
+    },
+    "apispringfieldCloudWatchRoleF23768EB": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/CloudWatchRole/Resource"
+      }
+    },
+    "apispringfieldAccountA93179AE": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "apispringfieldCloudWatchRoleF23768EB",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "apispringfield196222A9"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Account"
+      }
+    },
+    "apispringfieldDeployment0AF2AEF5077284b7f39daf281ffa3a8a098ed377": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "apispringfield196222A9"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "apispringfieldgetLocationGET8C163270",
+        "apispringfieldgetLocation08247132"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Deployment/Resource"
+      }
+    },
+    "apispringfieldDeploymentStagedev317CFBAC": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "apispringfield196222A9"
+        },
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "AccessLogs8B620ECA",
+              "Arn"
+            ]
+          },
+          "Format": "{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"user\":\"$context.identity.user\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\"}"
+        },
+        "DeploymentId": {
+          "Ref": "apispringfieldDeployment0AF2AEF5077284b7f39daf281ffa3a8a098ed377"
+        },
+        "StageName": "dev"
+      },
+      "DependsOn": [
+        "apispringfieldAccountA93179AE"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/DeploymentStage.dev/Resource"
+      }
+    },
+    "apispringfieldgetLocation08247132": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "apispringfield196222A9",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getLocation",
+        "RestApiId": {
+          "Ref": "apispringfield196222A9"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Default/getLocation/Resource"
+      }
+    },
+    "apispringfieldgetLocationGETApiPermissionCdkStackapispringfield448A4587GETgetLocation21601209": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaGetLocation8AEF967B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "apispringfield196222A9"
+              },
+              "/",
+              {
+                "Ref": "apispringfieldDeploymentStagedev317CFBAC"
+              },
+              "/GET/getLocation"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Default/getLocation/GET/ApiPermission.CdkStackapispringfield448A4587.GET..getLocation"
+      }
+    },
+    "apispringfieldgetLocationGETApiPermissionTestCdkStackapispringfield448A4587GETgetLocation6B578210": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaGetLocation8AEF967B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "apispringfield196222A9"
+              },
+              "/test-invoke-stage/GET/getLocation"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Default/getLocation/GET/ApiPermission.Test.CdkStackapispringfield448A4587.GET..getLocation"
+      }
+    },
+    "apispringfieldgetLocationGET8C163270": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "apispringfieldgetLocation08247132"
+        },
+        "RestApiId": {
+          "Ref": "apispringfield196222A9"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200"
+            }
+          ],
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "lambdaGetLocation8AEF967B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "StatusCode": "200"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/api-springfield/Default/getLocation/GET/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3VSyW7CMBD9lt6Nu6nqmUVUlVqBgDtybJMOJJ7IY4OiKP9eLyxBak/z5vnN8my/8Od3/vQgTjSS6jCqoODd2gl5YIHadmSIdxtsQLLpzmSw9gVJC40DNJEd5j1TrRE1qtBmI4pKp7IIekavvJt4edAukmeUwxIrkO2NPuc5mQgK1bJCr3YWjePdDMhZKHzaYGGhBDOWUhN9Km0cuNRpGgvmseA/xbBNzypRF0rwbu6NvFgb4qW2NRAlLYiadyvM9lK8Ocgo2t0KIu2Ij2NgFZbhLr+w/LDom6i84pUm9FbqW5N7pmeigVI4fRJtmKvJjRs4yy4w2ENvHJvppsK2Di6TxVsWXrVM+2ZwmRBv95oMR7Nv7X5QRSqjvh/oPDms/yy7P1paPILSlqVLiKPBlFG/8K7xaccpGgX5DQwqzff0eAyf8i18yz0BjGywBbXmqxx/AZ1X0h2yAgAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkStack/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Outputs": {
+    "bucketName": {
+      "Description": "The nmae of bucket",
+      "Value": {
+        "Ref": "s3springfield97C835D3"
+      }
+    },
+    "distributionDomainName": {
+      "Description": "The domain name of the Distribution",
+      "Value": {
+        "Fn::GetAtt": [
+          "springfield2F4824B0",
+          "DomainName"
+        ]
+      }
+    },
+    "apispringfieldEndpointCD9E2077": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "apispringfield196222A9"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "apispringfieldDeploymentStagedev317CFBAC"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "apiUrl": {
+      "Description": "The url of API Gateway",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "apispringfield196222A9"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "apispringfieldDeploymentStagedev317CFBAC"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "CdkStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "CdkStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "CdkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "CdkStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/654ed9bf7a9e63d9a6acd946cd25759c09fda2b7ff6d368f589c77d8df8e076a.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "CdkStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "CdkStack.assets"
+      ],
+      "metadata": {
+        "/CdkStack/sns-springfield/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "snsspringfield33A07412"
+          }
+        ],
+        "/CdkStack/BusLocationInfo": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "BusLocationInfoA536C5A5"
+            }
+          }
+        ],
+        "/CdkStack/BusLocationInfo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BusLocationInfoA536C5A5"
+          }
+        ],
+        "/CdkStack/s3-springfield/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "s3springfield97C835D3"
+          }
+        ],
+        "/CdkStack/s3-springfield/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "s3springfieldPolicyB32DDC6C"
+          }
+        ],
+        "/CdkStack/s3-springfield/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "s3springfieldAutoDeleteObjectsCustomResource09DEFBD4"
+          }
+        ],
+        "/CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/CdkStack/bucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "bucketName"
+          }
+        ],
+        "/CdkStack/springfield/Origin1/S3Origin/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "springfieldOrigin1S3Origin452C5424"
+          }
+        ],
+        "/CdkStack/springfield/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "springfield2F4824B0"
+          }
+        ],
+        "/CdkStack/distributionDomainName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "distributionDomainName"
+          }
+        ],
+        "/CdkStack/lambdaGetLocation/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaGetLocationServiceRole8E9E8F54"
+          }
+        ],
+        "/CdkStack/lambdaGetLocation/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaGetLocationServiceRoleDefaultPolicyBB7F0B7F"
+          }
+        ],
+        "/CdkStack/lambdaGetLocation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaGetLocation8AEF967B"
+          }
+        ],
+        "/CdkStack/lambdaGetLocation/InvokeServicePrincipal(apigateway.amazonaws.com)": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaGetLocationInvokeServicePrincipalapigatewayamazonawscomA976FE75"
+          }
+        ],
+        "/CdkStack/LambdaSlack/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaSlackServiceRole519A82E6"
+          }
+        ],
+        "/CdkStack/LambdaSlack/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaSlackA1FFF73E"
+          }
+        ],
+        "/CdkStack/LambdaSlack/AllowInvoke:CdkStacksnsspringfieldA7867E28": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaSlackAllowInvokeCdkStacksnsspringfieldA7867E286DF3E9B1"
+          }
+        ],
+        "/CdkStack/LambdaSlack/sns-springfield/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaSlacksnsspringfieldB40916D1"
+          }
+        ],
+        "/CdkStack/AccessLogs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AccessLogs8B620ECA"
+          }
+        ],
+        "/CdkStack/AccessLogs/Policy/ResourcePolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AccessLogsPolicyResourcePolicyA1E3EF94"
+          }
+        ],
+        "/CdkStack/api-springfield/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfield196222A9"
+          }
+        ],
+        "/CdkStack/api-springfield/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldCloudWatchRoleF23768EB"
+          }
+        ],
+        "/CdkStack/api-springfield/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldAccountA93179AE"
+          }
+        ],
+        "/CdkStack/api-springfield/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldDeployment0AF2AEF5077284b7f39daf281ffa3a8a098ed377"
+          }
+        ],
+        "/CdkStack/api-springfield/DeploymentStage.dev/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldDeploymentStagedev317CFBAC"
+          }
+        ],
+        "/CdkStack/api-springfield/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldEndpointCD9E2077"
+          }
+        ],
+        "/CdkStack/api-springfield/Default/getLocation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldgetLocation08247132"
+          }
+        ],
+        "/CdkStack/api-springfield/Default/getLocation/GET/ApiPermission.CdkStackapispringfield448A4587.GET..getLocation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldgetLocationGETApiPermissionCdkStackapispringfield448A4587GETgetLocation21601209"
+          }
+        ],
+        "/CdkStack/api-springfield/Default/getLocation/GET/ApiPermission.Test.CdkStackapispringfield448A4587.GET..getLocation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldgetLocationGETApiPermissionTestCdkStackapispringfield448A4587GETgetLocation6B578210"
+          }
+        ],
+        "/CdkStack/api-springfield/Default/getLocation/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apispringfieldgetLocationGET8C163270"
+          }
+        ],
+        "/CdkStack/apiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiUrl"
+          }
+        ],
+        "/CdkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/CdkStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/CdkStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/CdkStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "CdkStack"
+    }
+  }
+}

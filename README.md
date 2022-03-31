@@ -4,7 +4,8 @@
 
 전체적인 Architecture 구조는 아래와 같습니다. 
 
-![image](https://user-images.githubusercontent.com/52392004/161054356-9a64a0b1-7671-4138-905e-b0c1c3eab69c.png)
+
+![image](https://user-images.githubusercontent.com/52392004/161161317-b0c71c33-6e07-4dcd-85e3-b0fc815689e9.png)
 
 
 
@@ -35,11 +36,22 @@
 4) 상용 및 오픈소스 소프트웨어의 혼재된 사용으로 인한 운영 비효율
 
 
+
 ## Customer Pain Point 및 클라우드 구성 Requirement
 
 고객의 Pain Point 및 클라우드 환경으로의 전환에 있어 필요한 Requirement 는 다음과 같습니다.
 
 Picture1.png![image](https://user-images.githubusercontent.com/102651767/161022249-c1243e02-8f6b-4e9c-9a60-616bc4eb7850.png)
+
+
+IOT Core는 아래와 같이 IoT 디바이스, 무선 게이트웨이, 서비스 및 앱과의 연결을 지원하는 서비스입니다. DB로 실시간 데이터를 수집하고 디바이스 관리시스템을 제공합니다. 또한 Serverless로 확장성 및 성능을 확보할 수 있으며, 디바이스 인증기능까지 제공하여 Data의 보안성을 확보할 수 있습니다. AWS IOT Core는 다양한 언의의 SDK 및 연결 샘풀을 제공합니다. 
+
+<img width="359" alt="image" src="https://user-images.githubusercontent.com/52392004/161160656-2a936131-5259-4d2e-b456-c724167fd90c.png">
+
+AWS DynamoDB는 확정성과 예측가능한 성능을 제공하는 완전관리형 NoSQL 데이터베이스입니다. 고성능으로 대량의 실시간 센터 데이터에 대한 쓰기 성능을 제공하여 10ms 미만의 지연시간을 제공할 수 있습니다. 역시 Serverless이므로 하드웨어 구축 및 관리 Cost를 최소화합니다. Key-Value형태로 데이터를 저장하여 서비스 추가 및 변경에 대한 유연성을 확보합니다. 무제한 스토리지와 처리량 확장이 가능하며 On-Demend와 Provisioned Mode를 제공하여 비용도 절감 할 수 있습니다. 
+
+<img width="377" alt="image" src="https://user-images.githubusercontent.com/52392004/161160840-106cbd2c-2667-4425-894a-62086e25829f.png">
+
 
 
 ## Web Client 개발 

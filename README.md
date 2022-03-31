@@ -17,6 +17,7 @@
 4) 데이터중 도착 예상정보 및 빈좌석과 같은 유용한 정보는 슬랙을 이용하여 사용자가 편리하게 사용 할 수 있습니다. 
 
 
+
 ## Customer AS-IS
 고객 시나리오의 AS-IS Architecture 는 다음과 같습니다.
 
@@ -31,7 +32,9 @@
 4) 상용 및 오픈소스 소프트웨어의 혼재된 사용으로 인한 운영 비효율
 
 
-## Customer Pain Point 및 클라우스 구성 Requirement
+## Customer Pain Point 및 클라우드 구성 Requirement
+고객의 Pain Point 및 클라우드 환경으로의 전환에 있어 필요한 Requirement 는 다음과 같습니다.
+
 Picture1.png![image](https://user-images.githubusercontent.com/102651767/161022249-c1243e02-8f6b-4e9c-9a60-616bc4eb7850.png)
 
 

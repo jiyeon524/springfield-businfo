@@ -1,4 +1,4 @@
-## Lambda for getLocation
+## getLocation API를 구현하기 위한 Lambda 코드 
 
 client에서 요청은 event의 형태로 lambda로 들어오며, Lambda for getLocation은 dynomodb를 조회하여 필요한 데이터를 로딩한후, 가장 가까운 버스를 찾고 해당 버스의 정보로 사용자에게 알려줄 notification을 생성합니다. 
 
